@@ -28,6 +28,9 @@ print ("Load the pod bays. Nuts will release as programmed.")
 try:
     while True:
         now = datetime.datetime.now() # get current date and time
+        print (now)
+        costam = round(time.time() * 1000)
+        print (costam)
         
         database = firebase.database()
         
@@ -35,6 +38,8 @@ try:
         isFeedingStatus = testBucket.child("isFeeding").get().val()
         
         scheduleBucket = database.child("ScheduleInfo").get()
+        
+        turnAmount = 1
         
         for scheduleData in scheduleBucket.each():
             schedule = scheduleData.val()
@@ -62,7 +67,24 @@ try:
                 time.sleep(0.3)
                 servo1.ChangeDutyCycle(0)
                 time.sleep(0.3)
+            
             database.child("test").update({"isFeeding": "0"})
+            
+            timeStamp = round(time.time() * 1000)
+            
+            statsBucket = database.child("statsTable")
+            
+            #firebase = firebase.FirebaseApplication("https://test-3fe6c-default-rtdb.firebaseio.com", None)
+            
+            statsData = {"amount": turnAmount,
+                         "dateTime": timeStamp
+                         }
+            
+            statsBucket.push(statsData)
+            
+            #result = firebase.post("test-3fe6c-default-rtdb/statsTable", statsData)
+            
+            turnAmount = 1
            # break
         
         time.sleep(10) # pause to lower CPU activity
