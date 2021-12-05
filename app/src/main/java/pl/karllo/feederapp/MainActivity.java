@@ -12,7 +12,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Button buttonRunNow, buttonSchedule;
+    private Button buttonRunNow, buttonSchedule, buttonStats;
     private DatabaseReference dbRef;
 
     @Override
@@ -36,11 +36,20 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        buttonStats.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, StatsActivity.class);
+                startActivity(intent);
+            }
+        });
+
     }
 
     private void initialize() {
         buttonRunNow = findViewById(R.id.buttonRunNow);
         buttonSchedule = findViewById(R.id.buttonSchedule);
+        buttonStats = findViewById(R.id.buttonStats);
         dbRef = FirebaseDatabase.getInstance().getReference().child("test");
     }
 }
