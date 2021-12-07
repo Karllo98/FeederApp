@@ -4,6 +4,7 @@ public class StatsValue {
     long timeValue;
     int amount;
 
+
     public StatsValue() {
     }
 
@@ -18,5 +19,9 @@ public class StatsValue {
 
     public int getAmount() {
         return amount;
+    }
+
+    public void setTimeValue(long timeValue) {
+        this.timeValue = timeValue;
     }
 }
