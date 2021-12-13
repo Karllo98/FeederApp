@@ -11,6 +11,13 @@ config = {
   "storageBucket": "test-3fe6c.appspot.com"
 }
 
+def break_beam_callback(channel):
+    if GPIO.input(13):
+        print("beam unbroken")
+    else:
+        #print("beam broken")
+        database.child("test").update({"isFeeding": "1"})
+
 firebase = pyrebase.initialize_app(config)
 
 # Set GPIO numbering mode
@@ -18,6 +25,10 @@ GPIO.setmode(GPIO.BOARD)
 
 # Set pins 11 & 12 as outputs, and define as PWM servo1 & servo2
 GPIO.setup(11,GPIO.OUT)
+
+GPIO.setup(13,GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.add_event_detect(13, GPIO.BOTH, callback=break_beam_callback)
+
 servo1 = GPIO.PWM(11,50) # pin 11 for servo1
 
 # Start PWM running on both servos, value of 0 (pulse off)
@@ -39,7 +50,7 @@ try:
         
         scheduleBucket = database.child("ScheduleInfo").get()
         
-        turnAmount = 1
+        turnAmount = 3
         
         for scheduleData in scheduleBucket.each():
             schedule = scheduleData.val()
